@@ -1,0 +1,36 @@
+﻿
+@model List<ServiceGetVM>
+@{
+    int order = 1;
+}
+<a class="btn btn-success" asp-action="Create" >Create</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Details</th>
+            <th scope="col">Image</th>
+            <th scope="col">Category</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+
+        <tr>
+            <th scope="row">@(order++)</th>
+            <td>@item.Title</td>
+            <td>@item.Details</td>
+            <td><img width="75" height="75" src="~/images/@item.ImageUrl"/></td>
+            <td>@item.Category.Name</td>
+            <td>
+                <a class="btn btn-success" asp-action="Update" asp-route-id="@item.Id">Update</a>
+                <a class="btn btn-success" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        }
+        
+    </tbody>
+</table>
