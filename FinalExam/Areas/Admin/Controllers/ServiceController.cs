@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace FinalExam.Areas.Admin.Controllers
 {
     [Area("Admin")]
-
+    [Authorize(Roles = "Admin")]
     public class ServiceController(FinalDbContext _context) : Controller
     {
         public async Task<IActionResult> Index()

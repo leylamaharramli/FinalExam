@@ -1,4 +1,7 @@
 using FinalExam.DataAccessLayer;
+using FinalExam.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
@@ -13,6 +16,16 @@ namespace FinalExam
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("MSSQL"));
             });
+            builder.Services.AddIdentity<User, IdentityRole<Guid>>(x =>
+            {
+                x.SignIn.RequireConfirmedEmail = false;
+                x.Lockout.MaxFailedAccessAttempts = 3;
+                x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30);
+                x.User.RequireUniqueEmail = true;
+                x.Password.RequireNonAlphanumeric = true;
+                x.Password.RequireUppercase = true;
+                x.Password.RequiredLength = 7;
+            }).AddEntityFrameworkStores<FinalDbContext>().AddDefaultTokenProviders();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -31,13 +44,8 @@ namespace FinalExam
             app.UseStaticFiles();
 
             app.UseRouting();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
-            //app.MapControllerRoute(name: "login", "/LOGIN", new()
-            //{
-            //    //Action="Login",
-            //    //Controller="Account"
-            //});
             app.MapControllerRoute(
             name: "areas",
             pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
